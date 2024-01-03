@@ -19,5 +19,7 @@ module "subnets" {
   name              = each.value.name
   vpc_id            = lookup(lookup(module.vpc, each.value.vpc_name, null ), "vpc_id", null )
   vpc_peering_connection_id = lookup(lookup(module.vpc, each.value.vpc_name, null ), "vpc_peering_connection_id", null )
+  internet_gw     = each.value.internet_gw
+  nat_gw          = each.value.nat_gw
 
 }
