@@ -6,7 +6,7 @@ vpc = {
     cidr_block = "10.0.0.0/16"
     public_subnets_cidr = ["10.0.0.0/17", "10.0.1.0/17"]
     private_subnets_cidr = ["10.0.3.0/17", "10.0.4.0/17"]
-
+    availability_zones   = ["us-east-1a", "us-east-1b"]
 
   }
 }
