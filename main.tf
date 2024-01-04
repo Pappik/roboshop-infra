@@ -11,12 +11,12 @@ module "vpc" {
   availability_zone = each.value.availability_zone
 }
 
-module "docdb" {
-  source = "github.com/Pappik/tf-module-docdb"
-  env    = var.env
-
-  for_each = var.docdb
-  //subnet_ids = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
-  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
- // allow_cidr = lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null),"private_subnet_ids", null), "app", null),"cidr_block", null)
-}
+#module "docdb" {
+#  source = "github.com/Pappik/tf-module-docdb"
+#  env    = var.env
+#
+#  for_each = var.docdb
+#  //subnet_ids = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
+#  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+# // allow_cidr = lookup(lookup(lookup(lookup(var.vpc, each.value.vpc_name, null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+#}
