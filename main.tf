@@ -12,18 +12,10 @@ module "vpc" {
   availability_zone = each.value.availability_zone
 }
 
-#module "subnets" {
-#  source = "github.com/Pappik/tf-module-subnets"
-#  env            = var.env
-#  default_vpc_id = var.default_vpc_id
-#
-#  for_each = var.subnets
-#  cidr_block = each.value.cidr_block
-#  availability_zone = each.value.availability_zone
-#  name              = each.value.name
-#  vpc_id            = lookup(lookup(module.vpc, each.value.vpc_name, null ), "vpc_id", null )
-#  vpc_peering_connection_id = lookup(lookup(module.vpc, each.value.vpc_name, null ), "vpc_peering_connection_id", null )
-#  internet_gw     = each.value.internet_gw
-#  nat_gw          = each.value.nat_gw
-#
-#}
+module "docdb" {
+  source = "github.com/Pappik/tf-module-docdb"
+  env    = var.env
+
+  for_each = var.docdb
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, each.value.vpc_name, null ), "private_subnet_ids", null ), each.value.subnets_name, null ), "subnet_ids", null )
+}
