@@ -100,7 +100,7 @@ alb = {
 }
 
 
-app = {
+apps = {
   frontend = {
     component = "frontend"
     vpc_name  = "main"
