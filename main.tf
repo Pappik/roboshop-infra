@@ -24,6 +24,42 @@ module "docdb" {
   instance_class        = each.value.instance_class
 }
 
-output "vpc" {
-  value = module.vpc
+
+module "rds" {
+  source = "github.com/Pappik/tf-module-rds"
+  env    = var.env
+
+  for_each = var.rds
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
+  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+  engine = each.value.engine
+  engine_version = each.value.engine_version
+  number_of_instances   = each.value.number_of_instances
+  instance_class        = each.value.instance_class
+}
+
+module "elasticache" {
+  source = "github.com/Pappik/tf-module-elasticache"
+  env    = var.env
+
+  for_each = var.elasticache
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
+  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+  num_node_groups         = each.value.num_node_groups
+  replicas_per_node_group = each.value.replicas_per_node_group
+  node_type    = each.value.node_type
+}
+
+module "rabbitmq" {
+  source = "github.com/Pappik/tf-module-rabbitmq"
+  env    = var.env
+
+  for_each = var.rabbitmq
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
+  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+  engine_type = each.value.engine_type
+  engine_version = each.value.engine_version
 }
