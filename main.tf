@@ -65,3 +65,14 @@ module "rabbitmq" {
   host_instance_type = each.value.host_instance_type
   deployment_mode = each.value.deployment_mode
 }
+
+module "alb" {
+  source = "github.com/Pappik/tf-module-alb"
+  env    = var.env
+
+  for_each = var.alb
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),each.value.subnets_type, null),each.value.subnets_name, null),"subnet_ids", null)
+  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+ subnets_name = each.value.subnets_name
+}
