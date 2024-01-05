@@ -44,6 +44,7 @@ docdb = {
   main = {
     vpc_name = "main"
     subnets_name = "db"
+    engine_version = 4.0.0
   }
 }
 

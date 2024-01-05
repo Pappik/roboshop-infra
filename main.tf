@@ -16,10 +16,10 @@ module "docdb" {
   env    = var.env
 
   for_each = var.docdb
- // subnet_ids   = ["subnet-00e6ec174d9ca3690","subnet-019afab3197e1582b"]
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
   vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
+  engine_version = each.value.engine_version
 }
 
 output "vpc" {
