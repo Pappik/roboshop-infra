@@ -77,8 +77,6 @@ rabbitmq = {
     subnets_name = "db"
     engine_type  = "RabbitMQ"
     engine_version = "3.10.10"
-    num_node_groups         = 2
-    replicas_per_node_group = 1
-    node_type    = "cache.t3.micro"
+    host_instance_type = "mq.t3.micro"
   }
 }
