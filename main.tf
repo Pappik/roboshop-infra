@@ -89,3 +89,7 @@ module "apps" {
   component   = each.value.component
   app_port    = each.value.app_port
 }
+
+output "vpc" {
+  value = module.vpc
+}
