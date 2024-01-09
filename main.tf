@@ -97,5 +97,5 @@ module "alb" {
 #}
 
 output "vpc" {
-  value = module.vpc
+  value = lookup(lookup(lookup(lookup(module.vpc, "main" , null), each.value.allow_cidr_subnets_type, null), each.value.allow_cidr_subnets_name, null),"cidr_block", null)
 }
