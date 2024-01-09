@@ -1,4 +1,4 @@
-bastion_cidr = ["172.31.44.191/32"]
+bastion_cidr = ["172.31.44.191/20"]
 env = "dev"
 default_vpc_id = "vpc-0b7d7daeedf05b074"
 
