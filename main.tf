@@ -78,17 +78,23 @@ module "alb" {
   internal = each.value.internal
 }
 
-#module "apps" {
-#  source = "github.com/Pappik/tf-module-apps"
-#  env    = var.env
-#
-#  for_each = var.apps
-#  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),each.value.subnets_type, null),each.value.subnets_name, null),"subnet_ids", null)
-#  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-#  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null), each.value.allow_cidr_subnets_type, null), each.value.allow_cidr_subnets_name, null),"cidr_block", null)
-#  component   = each.value.component
-#  app_port    = each.value.app_port
-#}
+module "apps" {
+  source = "github.com/Pappik/tf-module-apps"
+  env    = var.env
+
+  for_each = var.apps
+  subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),each.value.subnets_type, null),each.value.subnets_name, null),"subnet_ids", null)
+  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
+  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null), each.value.allow_cidr_subnets_type, null), each.value.allow_cidr_subnets_name, null),"cidr_block", null)
+  component   = each.value.component
+  app_port    = each.value.app_port
+  max_size = each.value.max_size
+  min_size = each.value.min_size
+  desired_capacity = each.value.desired_capacity
+  instance_type    = each.value.instance_type
+
+
+}
 
 output "vpc" {
   value = module.vpc
