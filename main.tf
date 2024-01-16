@@ -17,8 +17,8 @@ module "docdb" {
 
   for_each = var.docdb
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
-  vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
- allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"subnet_ids", null)
+  vpc_id = lookup(lookup(var.vpc, each.value.vpc_name, null), "vpc_id", null)
+ allow_cidr = lookup(lookup(lookup(lookup(var.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
   engine_version = each.value.engine_version
   number_of_instances   = each.value.number_of_instances
   instance_class        = each.value.instance_class
@@ -32,7 +32,7 @@ module "rds" {
   for_each = var.rds
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
   vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"subnet_ids", null)
+  allow_cidr = lookup(lookup(lookup(lookup(var.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
   engine = each.value.engine
   engine_version = each.value.engine_version
   number_of_instances   = each.value.number_of_instances
@@ -46,7 +46,7 @@ module "elasticache" {
   for_each = var.elasticache
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
   vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"subnet_ids", null)
+  allow_cidr = lookup(lookup(lookup(lookup(var.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
   num_cache_nodes         = each.value.num_cache_nodes
   node_type    = each.value.node_type
   engine_version  = each.value.engine_version
@@ -59,7 +59,7 @@ module "rabbitmq" {
   for_each = var.rabbitmq
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null),each.value.subnets_name, null),"subnet_ids", null)
   vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-  allow_cidr = lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "app", null),"subnet_ids", null)
+  allow_cidr = lookup(lookup(lookup(lookup(var.vpc, "main" , null),"private_subnet_ids", null), "app", null),"cidr_block", null)
   engine_type = each.value.engine_type
   engine_version = each.value.engine_version
   host_instance_type = each.value.host_instance_type
@@ -75,7 +75,7 @@ module "alb" {
   for_each = var.alb
   subnet_ids = lookup(lookup(lookup(lookup(module.vpc, "main" , null),each.value.subnets_type, null),each.value.subnets_name, null),"subnet_ids", null)
   vpc_id = lookup(lookup(module.vpc, each.value.vpc_name, null), "vpc_id", null)
-  allow_cidr = each.value.internal ? lookup(lookup(lookup(lookup(module.vpc, "main" , null),"private_subnet_ids", null), "web", null),"subnet_ids", null) : ["0.0.0.0/0"]
+  allow_cidr = each.value.internal ? lookup(lookup(lookup(lookup(var.vpc, "main" , null),"private_subnet_ids", null), "web", null),"cidr_block", null) : ["0.0.0.0/0"]
   subnets_name = each.value.subnets_name
   internal = each.value.internal
 }
