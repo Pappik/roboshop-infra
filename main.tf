@@ -109,30 +109,32 @@ module "apps" {
 #}
 
 #Load Test Machine
-#resource "aws_spot_instance_request" "Load" {
-#  instance_type = "t3.medium"
-#  ami = "ami-0f3c7d07486cad139"
-#  subnet_id = "subnet-0253bec00533f5afe"
-#  vpc_security_group_ids = ["sg-0a035f3f36b489e4a"]
-#  wait_for_fulfillment = true
-#
-#}
-#
-#resource "aws_ec2_tag" "tag" {
-#  resource_id = aws_spot_instance_request.Load.spot_instance_id
-#  value       = "load-rummer"
-#  key = "Name"
-#}
-#resource "null_resource" "apply" {
-#  connection {
-#    host = aws_spot_instance_request.Load.public_ip
-#    user = "root"
-#    password = "DevOps321"
-#  }
-#  inline = [
-#  "curl -s -L https://get.docker.com | bash",
-#    "systemctl enable docker",
-#    "systemctl start docker",
-#    "docker pull roboshop/rs-load"
-#  ]
-#}
+resource "aws_spot_instance_request" "Load" {
+  instance_type = "t3.medium"
+  ami = "ami-0f3c7d07486cad139"
+  subnet_id = "subnet-0253bec00533f5afe"
+  vpc_security_group_ids = ["sg-0a035f3f36b489e4a"]
+  wait_for_fulfillment = true
+
+}
+
+resource "aws_ec2_tag" "tag" {
+  resource_id = aws_spot_instance_request.Load.spot_instance_id
+  value       = "load-rummer"
+  key = "Name"
+}
+resource "null_resource" "apply" {
+  provisioner "remote-exec" {
+    connection {
+      host     = aws_spot_instance_request.Load.public_ip
+      user     = "root"
+      password = "DevOps321"
+    }
+    inline = [
+      "curl -s -L https://get.docker.com | bash",
+      "systemctl enable docker",
+      "systemctl start docker",
+      "docker pull roboshop/rs-load"
+    ]
+  }
+}
