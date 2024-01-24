@@ -120,7 +120,7 @@ resource "aws_spot_instance_request" "Load" {
 
 resource "aws_ec2_tag" "tag" {
   resource_id = aws_spot_instance_request.Load.spot_instance_id
-  value       = "load-rummer"
+  value       = "load-runner"
   key = "Name"
 }
 resource "null_resource" "apply" {
